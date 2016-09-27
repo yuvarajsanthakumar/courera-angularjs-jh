@@ -5,7 +5,7 @@ angular.module('LunchCheck', [])
 LunchCheckController.$inject = ['$scope'];
 
 function LunchCheckController($scope) {
-  $scope.inputText="";
+  $scope.inputText="1";
   $scope.outputText;
 
   $scope.checkLunch = function(){
