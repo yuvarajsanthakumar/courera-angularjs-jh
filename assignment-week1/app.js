@@ -13,22 +13,20 @@ function LunchCheckController($scope) {
       $scope.outputText = "Please enter data first";
     } else {
         var arrayOfFood = $scope.inputText.split(',');
-        var items = arrayOfFood.filter(ValidItem)
+        var items = arrayOfFood.filter(ValidItem);
         if (items.length <= 3) {
           $scope.outputText = "Enjoy!";
         } else {
             $scope.outputText = "Too much!";
         }
     }
-  }
+  };
 
   function ValidItem(item) {
-    if(item===undefined || item.trim()===""){
-      return false;
-    } else {
-      return true;
-    }
+    return !(item === undefined || item.trim() === "");
   }
+
+
 
   }
 }());
