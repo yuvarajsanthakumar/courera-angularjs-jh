@@ -10,7 +10,7 @@ function LunchCheckController($scope) {
 
   $scope.checkLunch = function(){
     if ($scope.inputText === undefined || $scope.inputText==="") {
-      $scope.outputText = "Please enter data first";
+      $scope.outputText = "Please enter data first!";
     } else {
         var arrayOfFood = $scope.inputText.split(',');
         var items = arrayOfFood.filter(ValidItem);
