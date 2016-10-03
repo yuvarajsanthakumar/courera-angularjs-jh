@@ -12,7 +12,7 @@
                 error: "<",
                 onRemove: '&'
             },
-            templateUrl: 'foundItemstemplate.html',
+            templateUrl: 'foundItemsTemplate.html',
             controller:FoundItemsDirectiveController,
             controllerAs: 'FoundItemsDisrectiveCtrl',
             bindToController: true
