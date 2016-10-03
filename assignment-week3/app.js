@@ -73,6 +73,10 @@
 
         NarrowItDownCtrl.RemoveItem = function (index) {
             NarrowItDownCtrl.foundItems.splice(index,1);
+            if(NarrowItDownCtrl.foundItems.length === 0)
+            {
+                NarrowItDownCtrl.ErrorMessage = "Everything Removed";
+            }
         };
     }
 })();
