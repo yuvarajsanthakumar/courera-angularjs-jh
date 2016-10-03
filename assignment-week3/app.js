@@ -51,13 +51,16 @@
         NarrowItDownCtrl.SearchTerm = "";
         NarrowItDownCtrl.foundItems = [];
         NarrowItDownCtrl.ErrorMessage = "";
+        NarrowItDownCtrl.isLoading = false;
 
         NarrowItDownCtrl.SearchMenu = function () {
+            NarrowItDownCtrl.isLoading = true;
             NarrowItDownCtrl.foundItems = [];
             NarrowItDownCtrl.ErrorMessage = "";
             if(NarrowItDownCtrl.SearchTerm.trim() === "")
             {
                 NarrowItDownCtrl.ErrorMessage = "Nothing found";
+                NarrowItDownCtrl.isLoading = false;
             }
             else {
                 MenuSearchService.getMatchedMenuItems(NarrowItDownCtrl.SearchTerm).then(function(result){
@@ -65,8 +68,9 @@
                     if(NarrowItDownCtrl.foundItems.length === 0) {
                         NarrowItDownCtrl.ErrorMessage = "Nothing found";
                     }
+                    NarrowItDownCtrl.isLoading = false;
 
-                })
+                });
             }
 
         };

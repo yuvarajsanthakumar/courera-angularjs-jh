@@ -16,7 +16,7 @@
     <div class="form-group narrow-button">
       <button class="btn btn-primary" ng-click="NarrowItDownCtrl.SearchMenu();">Narrow It Down For Me!</button>
     </div>
-
+    <div class="loader" ng-show="NarrowItDownCtrl.isLoading"></div>
     <found-items found="NarrowItDownCtrl.foundItems" error="NarrowItDownCtrl.ErrorMessage" on-remove="NarrowItDownCtrl.RemoveItem(index)"></found-items>
   </div>
    <script type="text/javascript" src="angular.min.js"></script>
