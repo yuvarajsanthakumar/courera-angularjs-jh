@@ -1,78 +1,78 @@
 (function(){
-    angular.module("ShoppingListCheckOff",[])
-        .controller("ToBuyController",ToBuyController)
-        .controller("AlreadyBoughtController",AlreadyBoughtController)
-        .service("ShoppingListCheckOffService",ShoppingListCheckOffService);
+    angular.module("NarrowItDownApp",[])
+        .controller("NarrowItDownController",NarrowItDownController)
+        .service("MenuSearchService",MenuSearchService)
+        .directive("foundItems",FoundItemsDirective);
 
-    function ShoppingListCheckOffService(){
+    function FoundItemsDirective(){
+        var ddo = {
+            restrict: 'AE',
+            scope: {
+                found: "<",
+                error: "<",
+                onRemove: '&'
+            },
+            templateUrl: 'foundItemstemplate.html',
+            controller:FoundItemsDirectiveController,
+            controllerAs: 'FoundItemsDisrectiveCtrl',
+            bindToController: true
+        };
+        return ddo;
+    }
+
+    function FoundItemsDirectiveController(){
+
+    }
+
+    MenuSearchService.$inject=['$http'];
+    function MenuSearchService($http){
         var service = this;
+        service.getMatchedMenuItems = function(searchTerm){
+            var response = $http({
+                method: "GET",
+                url: ("https://davids-restaurant.herokuapp.com/menu_items.json")
+                }).then(function (result) {
 
-        service.ItemsToBuy= [
+                var foundItems = result.data.menu_items.filter(function(item){
+                    return item.description.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1;
+                });
+                return foundItems;
+            });
+            return response;
+
+        }
+
+    }
+
+
+    NarrowItDownController.$inject=["MenuSearchService"];
+    function NarrowItDownController(MenuSearchService){
+        var NarrowItDownCtrl = this;
+        NarrowItDownCtrl.SearchTerm = "";
+        NarrowItDownCtrl.foundItems = [];
+        NarrowItDownCtrl.ErrorMessage = "";
+
+        NarrowItDownCtrl.SearchMenu = function () {
+            NarrowItDownCtrl.foundItems = [];
+            NarrowItDownCtrl.ErrorMessage = "";
+            if(NarrowItDownCtrl.SearchTerm.trim() === "")
             {
-                name: "Cookies",
-                quantity: 10
-            },
-            {
-                name: "Chocolate",
-                quantity: 10
-            },
-            {
-                name: "Milk",
-                quantity: 10
-            },
-            {
-                name: "Coke",
-                quantity: 10
-            },
-            {
-                name: "Pepsi",
-                quantity: 10
-            },
-            {
-                name: "Lays",
-                quantity: 10
-            },
-            {
-                name: "Ice Cream",
-                quantity: 10
-            },
-            {
-                name: "Pan Cake",
-                quantity: 10
-            },
-            {
-                name: "Candy",
-                quantity: 10
-            },
-            {
-                name: "Doughnut",
-                quantity: 10
+                NarrowItDownCtrl.ErrorMessage = "Nothing found";
+            }
+            else {
+                MenuSearchService.getMatchedMenuItems(NarrowItDownCtrl.SearchTerm).then(function(result){
+                    NarrowItDownCtrl.foundItems = result;
+                    if(NarrowItDownCtrl.foundItems.length === 0) {
+                        NarrowItDownCtrl.ErrorMessage = "Nothing found";
+                    }
+
+                })
             }
 
-        ];
-
-        service.ItemsBought = [];
-
-        service.moveToBoughtList = function (index) {
-            Array.prototype.push.apply(service.ItemsBought, service.ItemsToBuy.splice(index, 1));
-        }
-    }
-
-
-    ToBuyController.$inject=["ShoppingListCheckOffService"];
-    function ToBuyController(ShoppingListCheckOffService){
-        var ToBuyCtrl = this;
-        ToBuyCtrl.ItemsInList = ShoppingListCheckOffService.ItemsToBuy;
-
-        ToBuyCtrl.moveToBoughtList = function (index) {
-            ShoppingListCheckOffService.moveToBoughtList(index);
         };
-    }
 
-    AlreadyBoughtController.$inject=["ShoppingListCheckOffService"];
-    function AlreadyBoughtController(ShoppingListCheckOffService){
-        var AlreadyBoughtCtrl = this;
-        AlreadyBoughtCtrl.ItemsInList = ShoppingListCheckOffService.ItemsBought;
-
+        NarrowItDownCtrl.RemoveItem = function (index) {
+            NarrowItDownCtrl.foundItems.splice(index,1);
+        };
     }
 })();
